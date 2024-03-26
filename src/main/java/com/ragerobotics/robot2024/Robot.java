@@ -76,7 +76,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         m_compressor.enableAnalog(Constants.kMinPressure, Constants.kMaxPressure);
-        LEDs.allianceColor();
+        LEDs.whiteLights();
     }
 
     @Override
@@ -188,12 +188,6 @@ public class Robot extends TimedRobot {
         double intakeDemand = Math.max(m_driverController.getLeftTriggerAxis(),
                 m_operatorController.getLeftTriggerAxis()) * Constants.kIntakeGain;
         Intake.getInstance().intake(intakeDemand);
-
-        if (Intake.getInstance().intakeSensorTripped()) {
-            LEDs.noteIn();
-        } else if (LEDs.greenOn) {
-            LEDs.allianceColor();
-        }
 
         if (m_driverController.getAButton() || m_operatorController.getAButton()) {
             Climber.getInstance().retract();

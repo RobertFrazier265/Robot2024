@@ -24,9 +24,7 @@ public class LEDs implements ISystem {
     static AddressableLED m_led = new AddressableLED(Constants.kLEDChannel);
     static AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(600);
 
-    static int m_rainbowFirstPixelHue;
-
-    public static boolean greenOn;
+    static int m_PixelHue;
 
     static Optional<Alliance> alliance = DriverStation.getAlliance();
 
@@ -53,37 +51,46 @@ public class LEDs implements ISystem {
 
         m_led.setData(m_ledBuffer);
 
-        greenOn = false;
-
     }
 
     public static void rainbowColors() {
         for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-            final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
+            final var hue = (m_PixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
 
             m_ledBuffer.setHSV(i, hue, 255, 128);
         }
 
-        m_rainbowFirstPixelHue += 3;
+        m_PixelHue += 3;
 
-        m_rainbowFirstPixelHue %= 180;
+        m_PixelHue %= 180;
 
         m_led.setData(m_ledBuffer);
 
+    }
+
+    public static void fancyAllianceColor() {
+        if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+
+            for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+                m_ledBuffer.setRGB(i, 255, 0, 0);
+            }
+        }
+
+        else {
+            for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+                m_ledBuffer.setRGB(i, 0, 0, 255);
+            }
+        }
+
+        m_led.setData(m_ledBuffer);
+
+    }
     }
 
     public static void whiteLights() {
         for (var i = 0; i < m_ledBuffer.getLength(); i++) {
             m_ledBuffer.setRGB(i, 255, 255, 255);
         }
-    }
-
-    public static void noteIn() {
-        for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-            m_ledBuffer.setRGB(i, 92, 203, 131);
-        }
-
-        greenOn = true;
     }
 
     @Override

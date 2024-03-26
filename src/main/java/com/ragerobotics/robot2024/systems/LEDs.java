@@ -72,20 +72,38 @@ public class LEDs implements ISystem {
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
 
             for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-                m_ledBuffer.setRGB(i, 255, 0, 0);
+                final var hue = (m_PixelHue + (i * 180 / m_ledBuffer.getLength()));
+
+                m_ledBuffer.setHSV(i, hue, 255, 128);
+            }
+
+            if (m_PixelHue > 20) {
+                m_PixelHue = 0;
+            }
+            else {
+                m_PixelHue += 1;
             }
         }
 
         else {
             for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-                m_ledBuffer.setRGB(i, 0, 0, 255);
+                final var hue = (m_PixelHue + (i * 180 / m_ledBuffer.getLength()));
+
+                m_ledBuffer.setHSV(i, hue, 255, 128);
+            }
+
+            if (m_PixelHue > 135) {
+                m_PixelHue = 90;
+            }
+            else {
+                m_PixelHue += 1;
             }
         }
 
         m_led.setData(m_ledBuffer);
 
     }
-    }
+    
 
     public static void whiteLights() {
         for (var i = 0; i < m_ledBuffer.getLength(); i++) {

@@ -136,12 +136,12 @@ public class Robot extends TimedRobot {
         if (m_autoTask.getSelected() != null) {
             m_autoTask.getSelected().onStop();
         }
-
-        LEDs.allianceColor();
     }
 
     @Override
     public void teleopPeriodic() {
+        LEDs.fancyAllianceColor();
+
         if (m_driverController.getStartButton()) {
             SwerveDrive.getInstance().resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
         }
